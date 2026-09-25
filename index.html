@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betang Harati - Media Belajar SDLB Kapuas</title>
+    <!-- Menambahkan Ikon (Favicon) Web -->
+    <link rel="icon" href="asset/icon.png" type="image/png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dayakRed: '#D32F2F',
+                        dayakYellow: '#FBC02D',
+                        dayakBlack: '#212121',
+                        dayakWhite: '#F5F5F5',
+                        dayakGreen: '#388E3C',
+                        riverBlue: '#4FC3F7',
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['"Fredoka One"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #e0f7fa;
+            background-image: url('asset/bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            touch-action: manipulation;
+        }
+        
+        .motif-border {
+            border-bottom: 8px solid;
+            border-image: linear-gradient(to right, #D32F2F 25%, #FBC02D 25%, #FBC02D 50%, #212121 50%, #212121 75%, #F5F5F5 75%) 5;
+        }
+
+        .btn-bounce:active {
+            transform: scale(0.95);
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hide { display: none !important; }
+        
+        /* Animasi masuk transisi */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col font-sans text-gray-800">
+    
+    <audio id="soundSuccess" src="data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" preload="auto"></audio>
+    <audio id="soundWrong" src="data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" preload="auto"></audio>
+    <audio id="bgMusic" src="asset/msk.mp3" loop preload="auto"></audio>
+
+    <header class="bg-dayakRed text-white p-4 motif-border shadow-lg relative z-10">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-3 md:mb-0">
+                <!-- Icon/Logo MPI Pojok Kiri -->
+                <div class="bg-white p-2 rounded-2xl shadow-md shrink-0 flex items-center justify-center border-2 border-dayakYellow">
+                    <img src="asset/icon.png" alt="Logo MPI" class="w-12 h-12 md:w-14 md:h-14 object-contain" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <span class="text-4xl hidden px-1">🛖</span>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-display tracking-wide">BETANG HARATI</h1>
+                    <p class="text-sm md:text-base font-semibold mt-1">Kelas 6 SDLB Kuala Kapuas | Bumi Tingang Menteng Panunjung Tarung</p>
+                </div>
+            </div>
+            <div class="mt-4 md:mt-0 flex flex-row flex-wrap justify-center md:justify-end items-center gap-2 md:gap-3">
+                <!-- Tombol Home -->
+                <button id="btnHomeHeader" onclick="goHome()" class="bg-blue-500 text-white hover:bg-blue-600 px-3 py-2 md:px-4 rounded-full font-bold shadow-md flex items-center gap-2 btn-bounce transition-colors text-sm md:text-base hide">
+                    <span>🏠</span>
+                    <span class="hidden md:inline">Beranda</span>
+                </button>
+                
+                <!-- Tombol Profil -->
+                <button onclick="showProfileModal()" class="bg-purple-500 text-white hover:bg-purple-600 px-3 py-2 md:px-4 rounded-full font-bold shadow-md flex items-center gap-2 btn-bounce transition-colors text-sm md:text-base">
+                    <span>👨‍🏫</span>
+                    <span class="hidden md:inline">Profil</span>
+                </button>
+
+                <!-- Tombol Musik -->
+                <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-dayakGreen text-white hover:bg-green-600 px-3 py-2 md:px-4 rounded-full font-bold shadow-md flex items-center gap-2 btn-bounce transition-colors text-sm md:text-base" style="display: none;">
+                    <span id="musicIcon">🎵</span>
+                    <span id="musicText" class="hidden md:inline">Musik On</span>
+                </button>
+                
+                <!-- Tombol Fullscreen -->
+                <button onclick="toggleFullScreen()" class="bg-dayakYellow text-dayakRed hover:bg-yellow-400 px-3 py-2 md:px-4 rounded-full font-bold shadow-md flex items-center gap-2 btn-bounce transition-colors text-sm md:text-base">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="hidden md:inline">Layar Penuh</span>
+                </button>
+                
+                <div class="bg-white text-dayakRed px-3 py-2 md:px-4 rounded-full font-bold shadow text-xs md:text-sm hidden sm:block">
+                    TA 2026/2027
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 max-w-4xl mx-auto w-full">
+        
+        <!-- Screen: Landing Page -->
+        <div id="screen-landing" class="w-full flex flex-col items-center justify-center text-center fade-in">
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border-8 border-dayakRed max-w-lg w-full transform transition-all z-10">
+                <div class="mb-6 flex justify-center animate-float">
+                    <img src="asset/icn.png" alt="Ikon Selamat Datang" class="h-32 md:h-40 w-auto object-contain drop-shadow-2xl" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <span class="text-7xl md:text-8xl hidden">🛖 🌳</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-display text-dayakRed mb-4">Selamat Datang!</h2>
+                <p class="text-2xl md:text-3xl font-display text-gray-800 mb-2">Di BETANG HARATI</p>
+                <p class="text-lg md:text-xl text-gray-600 font-bold mb-6">Media Belajar SDLB<br>Kuala Kapuas</p>
+                
+                <!-- Input Nama Siswa -->
+                <div class="mb-8 w-full max-w-xs mx-auto">
+                    <label for="studentName" class="block text-lg font-bold text-gray-700 mb-2">Siapa nama kamu?</label>
+                    <input type="text" id="studentName" onkeypress="if(event.key === 'Enter') startApp()" placeholder="Ketik di sini..." autocomplete="off" class="w-full px-4 py-3 rounded-2xl border-4 border-dayakYellow text-center text-2xl font-bold text-gray-800 focus:outline-none focus:border-dayakGreen shadow-inner transition-colors">
+                </div>
+                
+                <button onclick="startApp()" class="btn-bounce bg-dayakGreen text-white text-3xl font-display px-10 py-5 rounded-full shadow-[0_8px_0_#2e7d32] active:shadow-[0_0px_0_#2e7d32] active:translate-y-2 transition-all w-full md:w-auto animate-pulse flex items-center justify-center gap-4 mx-auto hover:bg-green-600">
+                    <span>MULAI</span> <span>▶️</span>
+                </button>
+            </div>
+
+            <!-- Nama Pengembang Floating Badge (Telah diperbarui) -->
+            <div class="fixed bottom-4 left-4 md:bottom-6 md:left-6 bg-white/95 backdrop-blur border-b-4 border-dayakYellow rounded-2xl p-3 shadow-2xl text-left flex items-center gap-3 z-50">
+                <!-- Foto Profil Pengembang -->
+                <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-xl shadow-inner border-2 border-dayakRed bg-dayakRed flex items-center justify-center text-white overflow-hidden shrink-0">
+                    <img src="asset/profil.png" alt="Foto Joevenus Permana" class="w-full h-full object-cover absolute inset-0 z-10" onerror="this.style.display='none'">
+                    <span class="text-xl md:text-2xl z-0">👨‍🏫</span>
+                </div>
+                <div>
+                    <p class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest mb-0.5">Pengembang</p>
+                    <p class="text-sm md:text-base font-display text-dayakBlack">JOEVENUS PERMANA, S. Pd.</p>
+                    <p class="text-[10px] md:text-xs font-bold text-dayakRed mt-0.5 uppercase">SKH NEGERI 1 KUALA KAPUAS</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-home" class="w-full hide fade-in">
+            <div class="text-center mb-8 bg-white/80 backdrop-blur rounded-2xl p-4 inline-block">
+                <div class="text-6xl mb-2 animate-float">🦅 🛶 🛖</div>
+                <h2 class="text-3xl md:text-4xl font-display text-dayakBlack mb-2">Mari Belajar, <span id="display-student-name" class="text-dayakRed">Siswa Hebat</span>!
+                    <button onclick="changeStudent()" title="Ganti Siswa" class="inline-flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-sm md:text-xl px-3 py-1 rounded-full ml-2 btn-bounce shadow border-2 border-yellow-500 align-middle mb-1 transition-colors">
+                        ✏️ Ganti
+                    </button>
+                </h2>
+                <p class="text-lg text-gray-800 font-bold">Pilih pelajaran hari ini, yuk!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl mx-auto">
+                <button onclick="openSubject('indonesia')" class="btn-bounce bg-white border-4 border-blue-400 rounded-3xl p-6 shadow-xl flex flex-col items-center justify-center gap-4 hover:bg-blue-50 transition-colors">
+                    <span class="text-5xl">📖</span>
+                    <span class="text-2xl font-display text-blue-600">Bahasa Indonesia</span>
+                </button>
+
+                <button onclick="openSubject('matematika')" class="btn-bounce bg-white border-4 border-pink-400 rounded-3xl p-6 shadow-xl flex flex-col items-center justify-center gap-4 hover:bg-pink-50 transition-colors">
+                    <span class="text-5xl">🔢</span>
+                    <span class="text-2xl font-display text-pink-600">Matematika</span>
+                </button>
+
+                <button onclick="openSubject('ipas')" class="btn-bounce bg-white border-4 border-dayakGreen rounded-3xl p-6 shadow-xl flex flex-col items-center justify-center gap-4 hover:bg-green-50 transition-colors">
+                    <span class="text-5xl">🦧</span>
+                    <span class="text-2xl font-display text-dayakGreen">IPAS</span>
+                </button>
+
+                <button onclick="openSubject('ppkn')" class="btn-bounce bg-white border-4 border-dayakYellow rounded-3xl p-6 shadow-xl flex flex-col items-center justify-center gap-4 hover:bg-yellow-50 transition-colors">
+                    <span class="text-5xl">🤝</span>
+                    <span class="text-2xl font-display text-yellow-600">PPKn</span>
+                </button>
+            </div>
+
+            <div class="mt-8 text-center flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="document.getElementById('modal-predikat').classList.remove('hide')" class="btn-bounce bg-white/90 border-4 border-dayakRed text-dayakRed px-6 py-3 rounded-full font-bold shadow-md hover:bg-red-50 transition-colors inline-flex items-center justify-center gap-2 text-lg">
+                    <span>📋</span> Daftar Predikat Nilai
+                </button>
+                <button onclick="showDashboard()" class="btn-bounce bg-white/90 border-4 border-blue-500 text-blue-600 px-6 py-3 rounded-full font-bold shadow-md hover:bg-blue-50 transition-colors inline-flex items-center justify-center gap-2 text-lg">
+                    <span>📊</span> Hasil Belajar
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-material" class="w-full hide bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-dayakBlue max-w-3xl fade-in">
+            <div class="bg-gray-100 p-4 border-b-4 border-gray-200 flex justify-between items-center">
+                <button onclick="goHome()" class="btn-bounce bg-dayakRed text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 shadow">
+                    <span>⬅️</span> Kembali
+                </button>
+                <div class="font-display text-xl text-gray-800">Mari Membaca!</div>
+                <div class="w-24"></div> <!-- Spacer -->
+            </div>
+            
+            <div class="p-8 text-center">
+                <h2 id="mat-title" class="text-3xl md:text-4xl font-display text-blue-600 mb-6">Materi Belajar</h2>
+                <div id="mat-visual" class="text-8xl md:text-9xl mb-6 animate-float flex justify-center gap-4">
+                    <!-- Visual materi masuk sini -->
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-8 max-w-xl mx-auto shadow-inner text-left">
+                    <p id="mat-text" class="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed text-center">
+                        Isi materi
+                    </p>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="speakMaterial()" class="btn-bounce bg-yellow-400 text-yellow-900 text-xl font-bold px-6 py-4 rounded-2xl shadow-md flex items-center justify-center gap-2 hover:bg-yellow-500">
+                        <span>🔊</span> Bacakan Materi
+                    </button>
+                    <button onclick="startQuizExecution()" class="btn-bounce bg-dayakGreen text-white text-xl font-bold px-8 py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 hover:bg-green-600">
+                        <span>✅</span> Lanjut Kerjakan Soal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-quiz" class="w-full hide bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-dayakBlack max-w-3xl fade-in">
+            <!-- Quiz Header -->
+            <div class="bg-gray-100 p-4 border-b-4 border-gray-200 flex justify-between items-center">
+                <button onclick="backToMaterial()" class="btn-bounce bg-yellow-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2 shadow">
+                    <span>⬅️</span> Lihat Materi
+                </button>
+                <div id="subject-title" class="font-display text-xl md:text-2xl text-gray-800">Mata Pelajaran</div>
+                <div class="w-24"></div> <!-- Spacer for centering -->
+            </div>
+
+            <!-- Quiz Content -->
+            <div class="p-6 md:p-10 text-center">
+                <button onclick="speakQuestion()" class="mb-6 bg-blue-100 border-2 border-blue-300 hover:bg-blue-200 text-blue-900 px-6 py-3 rounded-full font-bold shadow-sm inline-flex items-center gap-3 btn-bounce text-lg">
+                    <span class="text-2xl">🔊</span> Dengarkan Soal
+                </button>
+                
+                <h3 id="question-text" class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 px-4">Pertanyaan?</h3>
+                
+                <div id="question-visual" class="text-7xl md:text-9xl mb-10 min-h-[150px] flex items-center justify-center animate-float">
+                    <!-- Emojis or SVGs go here -->
+                </div>
+
+                <!-- Answer Options -->
+                <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                    <!-- Buttons generated by JS -->
+                </div>
+            </div>
+            
+            <!-- Progress / Score -->
+            <div class="bg-gray-100 border-t-2 border-gray-200 p-5 flex justify-center gap-3" id="progress-container">
+                <!-- Dots generated by JS -->
+            </div>
+        </div>
+
+        <div id="screen-result" class="w-full hide text-center fade-in">
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-10 shadow-2xl border-4 border-dayakYellow max-w-lg mx-auto">
+                <div id="result-visual" class="text-8xl mb-6 animate-float">🏆 🌟</div>
+                <h2 id="result-title" class="text-4xl md:text-5xl font-display text-dayakGreen mb-4">Hebat Sekali!</h2>
+                <p class="text-2xl font-bold text-gray-700 mb-2">Nilai Kamu: <span id="result-score" class="text-5xl text-dayakRed font-display">100</span></p>
+                
+                <div class="bg-yellow-100 border-2 border-yellow-400 rounded-2xl p-4 inline-block mb-8 shadow-inner mt-2">
+                    <p id="result-predikat" class="text-2xl font-display text-yellow-800 tracking-wide">Predikat: SANGAT BAIK</p>
+                </div>
+                
+                <button onclick="goHome()" class="btn-bounce bg-dayakRed text-white text-2xl font-display px-8 py-5 rounded-2xl shadow-lg w-full flex justify-center items-center gap-3 hover:bg-red-700">
+                    <span>🏠</span> Kembali ke Menu
+                </button>
+            </div>
+        </div>
+
+        <div id="modal-predikat" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hide fade-in p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border-4 border-dayakRed relative">
+                <button onclick="document.getElementById('modal-predikat').classList.add('hide')" class="absolute -top-4 -right-4 bg-red-500 text-white w-10 h-10 rounded-full font-bold text-xl border-2 border-white shadow-lg hover:bg-red-600 transition-transform hover:scale-110">X</button>
+                <h2 class="text-3xl font-display text-dayakRed mb-6 text-center">Daftar Predikat</h2>
+                
+                <div class="space-y-4">
+                    <div class="bg-green-100 border-2 border-green-400 rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+                        <span class="text-4xl">🌟🌟🌟</span>
+                        <div class="text-left">
+                            <div class="font-bold text-xl text-green-800">Sangat Baik (A)</div>
+                            <div class="text-green-700 font-semibold">Nilai 80 - 100</div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-100 border-2 border-blue-400 rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+                        <span class="text-4xl">👍🌟🌟</span>
+                        <div class="text-left">
+                            <div class="font-bold text-xl text-blue-800">Baik (B)</div>
+                            <div class="text-blue-700 font-semibold">Nilai 60 - 79</div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-100 border-2 border-yellow-400 rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+                        <span class="text-4xl">💪🌟</span>
+                        <div class="text-left">
+                            <div class="font-bold text-xl text-yellow-800">Cukup (C)</div>
+                            <div class="text-yellow-700 font-semibold">Nilai di bawah 60</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-center mt-6 text-gray-600 font-bold bg-gray-100 p-2 rounded-lg">Sistem akan otomatis memberi predikat setelah kuis selesai.</p>
+            </div>
+        </div>
+
+        <!-- Modal Dasbor Hasil Belajar -->
+        <div id="modal-dashboard" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hide fade-in p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl border-4 border-blue-500 relative max-h-[90vh] flex flex-col">
+                <button onclick="closeDashboard()" class="absolute -top-4 -right-4 bg-red-500 text-white w-10 h-10 rounded-full font-bold text-xl border-2 border-white shadow-lg hover:bg-red-600 transition-transform hover:scale-110">X</button>
+                
+                <h2 class="text-3xl font-display text-blue-600 mb-2 text-center">📊 Hasil Belajar Siswa</h2>
+                <p class="text-center text-gray-600 font-bold mb-6">Sesi Pembelajaran Saat Ini</p>
+                
+                <div class="overflow-y-auto flex-grow bg-blue-50/50 rounded-2xl border-2 border-blue-100 p-2 shadow-inner">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-blue-100 text-blue-800 border-b-2 border-blue-200">
+                                <th class="p-3 font-bold rounded-tl-xl">Waktu</th>
+                                <th class="p-3 font-bold">Nama</th>
+                                <th class="p-3 font-bold">Pelajaran</th>
+                                <th class="p-3 font-bold text-center rounded-tr-xl">Nilai</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-table-body">
+                            <!-- Data tabel disuntikkan via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-6 flex justify-center">
+                    <button onclick="clearDashboard(this)" class="bg-red-100 text-red-600 font-bold py-3 px-6 rounded-xl hover:bg-red-200 transition-colors shadow-sm flex items-center gap-2">
+                        🗑️ Hapus Riwayat Sesi
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Profil Pengembang -->
+        <div id="modal-profile" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hide fade-in p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border-4 border-purple-500 relative text-center">
+                <button onclick="closeProfileModal()" class="absolute -top-4 -right-4 bg-red-500 text-white w-10 h-10 rounded-full font-bold text-xl border-2 border-white shadow-lg hover:bg-red-600 transition-transform hover:scale-110">X</button>
+                
+                <h2 class="text-3xl font-display text-purple-600 mb-6">Profil Pengembang</h2>
+                
+                <div class="w-32 h-32 mx-auto rounded-full border-4 border-purple-500 shadow-lg overflow-hidden mb-4 bg-purple-100 flex items-center justify-center text-5xl relative">
+                    <img src="asset/profil.png" alt="Foto Pengembang" class="w-full h-full object-cover absolute inset-0 z-10" onerror="this.style.display='none'">
+                    <span class="z-0">👨‍🏫</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-gray-800 mb-1">JOEVENUS PERMANA, S. Pd.</h3>
+                <p class="text-lg font-semibold text-purple-700 mb-4">SKH NEGERI 1 KUALA KAPUAS</p>
+                
+                <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 text-gray-600 font-medium text-sm md:text-base shadow-inner">
+                    <p>Media Pembelajaran Interaktif ini didesain secara khusus untuk siswa-siswi Kelas 6 SDLB Tunagrahita agar pengalaman belajar menjadi lebih menyenangkan, interaktif, dan bermakna.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center p-4 text-dayakBlack bg-white/70 backdrop-blur font-bold text-sm z-10 relative">
+        Desain Pembelajaran Interaktif Kelas 6 SDLB Tunagrahita <br>
+        Bumi Tingang Menteng Panunjung Tarung - © 2026/2027 <br>
+    </footer>
+
+    <script>
+        // Data Pembelajaran dengan Materi dan 5 Soal Per Mata Pelajaran
+        const appData = {
+            indonesia: {
+                title: "Bahasa Indonesia",
+                material: {
+                    title: "Mari Mengenal Benda!",
+                    visual: "🛖 🛶",
+                    content: "Di Kapuas ada Rumah Betang tempat kumpul keluarga. Ada juga perahu atau Jukung untuk pergi ke sungai. Ayo kita ingat namanya!",
+                    audio: "Mari Mengenal Benda! Di Kapuas ada Rumah Betang tempat kumpul keluarga. Ada juga perahu atau Jukung untuk pergi ke sungai. Ayo kita ingat namanya!"
+                },
+                questions: [
+                    {
+                        question: "Gambar apa ini?",
+                        visual: "asset/rumah_betang.png", 
+                        audio: "Ini gambar apa? Pilih tulisan yang tepat.",
+                        options: [
+                            { text: "RUMAH BETANG", correct: true },
+                            { text: "MOBIL KACA", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Kendaraan di Sungai Kapuas adalah...",
+                        visual: "asset/perahu.png", 
+                        audio: "Kendaraan di Sungai Kapuas adalah apa?",
+                        options: [
+                            { text: "PESAWAT", correct: false },
+                            { text: "PERAHU", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Ini huruf B - U - K - U. Dibaca apa?",
+                        visual: "asset/buku.png", 
+                        audio: "Ini huruf be, u, ka, u. Dibaca apa?",
+                        options: [
+                            { text: "BUKU", correct: true },
+                            { text: "BAJU", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Pisau khas suku Dayak bernama?",
+                        visual: "asset/mandau.png", 
+                        audio: "Pisau khas dari suku Dayak bernama apa?",
+                        options: [
+                            { text: "MANDAU", correct: true },
+                            { text: "SENDOK", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Manakah tulisan SUNGAI?",
+                        visual: "asset/sungai.png", 
+                        audio: "Manakah tulisan untuk kata Sungai?",
+                        options: [
+                            { text: "SEPATU", correct: false },
+                            { text: "SUNGAI", correct: true }
+                        ]
+                    }
+                ]
+            },
+            matematika: {
+                title: "Matematika",
+                material: {
+                    title: "Ayo Berhitung!",
+                    visual: "🦅 🦅 🦅",
+                    content: "Mari belajar berhitung dari 1 sampai 5. Ada angka 1, 2, 3, 4, dan 5. Kita berhitung dengan pelan-pelan ya.",
+                    audio: "Ayo Berhitung! Mari belajar berhitung dari satu sampai lima. Ada angka satu, dua, tiga, empat, dan lima. Kita berhitung dengan pelan-pelan ya."
+                },
+                questions: [
+                    {
+                        question: "Ada berapa burung Tingang?",
+                        visual: "asset/burung_2.png",
+                        audio: "Mari berhitung. Ada berapa burung Tingang di gambar ini?",
+                        options: [
+                            { text: "2 (Dua)", correct: true },
+                            { text: "4 (Empat)", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ada berapa Ikan Jelawat?",
+                        visual: "asset/ikan_3.png",
+                        audio: "Ada berapa Ikan Jelawat di atas?",
+                        options: [
+                            { text: "3 (Tiga)", correct: true },
+                            { text: "1 (Satu)", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Hitung buah pisang ini!",
+                        visual: "asset/pisang_4.png", 
+                        audio: "Ayo hitung, ada berapa buah pisang ini?",
+                        options: [
+                            { text: "2 (Dua)", correct: false },
+                            { text: "4 (Empat)", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Berapa rumah Betang di sini?",
+                        visual: "asset/rumah_betang.png", 
+                        audio: "Berapa banyak rumah Betang di gambar ini?",
+                        options: [
+                            { text: "1 (Satu)", correct: true },
+                            { text: "3 (Tiga)", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ada berapa pohon di hutan?",
+                        visual: "asset/pohon_5.png", 
+                        audio: "Hitunglah, ada berapa pohon di hutan ini?",
+                        options: [
+                            { text: "5 (Lima)", correct: true },
+                            { text: "3 (Tiga)", correct: false }
+                        ]
+                    }
+                ]
+            },
+            ipas: {
+                title: "IPAS",
+                material: {
+                    title: "Mengenal Alam Kita",
+                    visual: "🦧 🌳",
+                    content: "Hutan Kalimantan sangat lebat. Ada sungai yang sangat panjang. Banyak hewan hidup di hutan, seperti Orangutan dan Burung Tingang.",
+                    audio: "Mengenal Alam Kita. Hutan Kalimantan sangat lebat. Ada sungai yang sangat panjang. Banyak hewan hidup di hutan, seperti Orangutan dan Burung Tingang."
+                },
+                questions: [
+                    {
+                        question: "Hewan ini bernama?",
+                        visual: "asset/orangutan.png", 
+                        audio: "Hewan pintar yang hidup di hutan Kalimantan ini bernama apa?",
+                        options: [
+                            { text: "KUCING", correct: false },
+                            { text: "ORANGUTAN", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Manakah yang merupakan gambar Sungai?",
+                        visual: "asset/sungai.png", 
+                        audio: "Yang manakah tulisan Sungai?",
+                        options: [
+                            { text: "SUNGAI", correct: true },
+                            { text: "GUNUNG", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Burung cantik khas Kalimantan Tengah adalah?",
+                        visual: "asset/burung_tingang.png", 
+                        audio: "Ini adalah burung Tingang. Coba pilih namanya.",
+                        options: [
+                            { text: "BURUNG", correct: true },
+                            { text: "AYAM", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Hewan apa yang hidup di sungai?",
+                        visual: "asset/ikan.png", 
+                        audio: "Hewan apa yang berenang dan hidup di dalam sungai?",
+                        options: [
+                            { text: "KERA", correct: false },
+                            { text: "IKAN", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Banyak pohon ada di mana?",
+                        visual: "asset/hutan.png", 
+                        audio: "Tempat yang memiliki sangat banyak pohon disebut apa?",
+                        options: [
+                            { text: "HUTAN", correct: true },
+                            { text: "KOTA", correct: false }
+                        ]
+                    }
+                ]
+            },
+            ppkn: {
+                title: "PPKn",
+                material: {
+                    title: "Anak Baik dan Pintar",
+                    visual: "🤝 🌟",
+                    content: "Kita harus hidup rukun dan gotong royong (Handep). Kepada bapak atau ibu guru kita harus sopan dan memberi salam.",
+                    audio: "Anak Baik dan Pintar. Kita harus hidup rukun dan suka membantu teman atau gotong royong. Kepada bapak ibu guru di sekolah, kita harus sopan dan suka memberi salam."
+                },
+                questions: [
+                    {
+                        question: "Lambang sila ke-1 (Satu) adalah?",
+                        visual: "asset/bintang.png", 
+                        audio: "Lambang sila kesatu Pancasila adalah?",
+                        options: [
+                            { text: "BINTANG", correct: true },
+                            { text: "POHON", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Sikap baik saat bertemu guru di sekolah?",
+                        visual: "asset/salim.png", 
+                        audio: "Apa sikap yang baik saat kamu bertemu bapak atau ibu guru?",
+                        options: [
+                            { text: "MARAH", correct: false },
+                            { text: "MEMBERI SALAM", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Budaya Handep artinya melakukan pekerjaan secara?",
+                        visual: "asset/gotong_royong.png", 
+                        audio: "Budaya Handep berarti kita melakukan pekerjaan bersama-sama. Disebut apakah itu?",
+                        options: [
+                            { text: "GOTONG ROYONG", correct: true },
+                            { text: "BERKELAHI", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Sebelum makan kita harus?",
+                        visual: "asset/berdoa.png", 
+                        audio: "Sebelum kita makan, kita harus ngapain dulu?",
+                        options: [
+                            { text: "BERMAIN", correct: false },
+                            { text: "BERDOA", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Bermain dengan teman harus?",
+                        visual: "asset/rukun.png", 
+                        audio: "Saat kita bermain dengan teman, kita harus bagaimana?",
+                        options: [
+                            { text: "RUKUN", correct: true },
+                            { text: "MENANGIS", correct: false }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentSubjectKey = '';
+        let currentSubjectData = null;
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let isMusicPlaying = false; 
+
+        let currentScore = 0;
+        let currentAttempt = 0;
+        let studentName = ""; // Variabel untuk menyimpan nama siswa
+        
+        let learningHistory = []; // Variabel untuk menyimpan riwayat sesi
+
+        // DOM Elements
+        const screenLanding = document.getElementById('screen-landing');
+        const screenHome = document.getElementById('screen-home');
+        const screenMaterial = document.getElementById('screen-material');
+        const screenQuiz = document.getElementById('screen-quiz');
+        const screenResult = document.getElementById('screen-result');
+        
+        const matTitle = document.getElementById('mat-title');
+        const matVisual = document.getElementById('mat-visual');
+        const matText = document.getElementById('mat-text');
+
+        const subjectTitle = document.getElementById('subject-title');
+        const questionText = document.getElementById('question-text');
+        const questionVisual = document.getElementById('question-visual');
+        const optionsContainer = document.getElementById('options-container');
+        const progressContainer = document.getElementById('progress-container');
+        
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+
+        function startApp() {
+            // Mengambil input nama dari kolom isian
+            const nameInput = document.getElementById('studentName').value.trim();
+            studentName = nameInput !== "" ? nameInput : "Siswa Hebat";
+            
+            // Menampilkan nama di Menu Utama
+            document.getElementById('display-student-name').innerText = studentName;
+
+            // Menyapa siswa sesuai namanya dengan Suara
+            const welcomeMsg = new SpeechSynthesisUtterance(`Selamat datang ${studentName} di Betang Harati. Mari belajar bersama.`);
+            welcomeMsg.lang = 'id-ID';
+            window.speechSynthesis.speak(welcomeMsg);
+
+            bgMusic.volume = 0.3; 
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggleBtn.style.display = 'flex'; 
+                updateMusicButtonUI();
+            }).catch(e => {
+                console.log("Autoplay dicegah oleh browser.");
+                musicToggleBtn.style.display = 'flex'; 
+                isMusicPlaying = false;
+                updateMusicButtonUI();
+            });
+
+            // Memunculkan tombol beranda di Header setelah masuk
+            document.getElementById('btnHomeHeader').classList.remove('hide');
+
+            screenLanding.classList.add('hide');
+            screenHome.classList.remove('hide');
+        }
+
+        function goHome() {
+            window.speechSynthesis.cancel();
+            hideAllScreens();
+            screenHome.classList.remove('hide');
+        }
+
+        function changeStudent() {
+            window.speechSynthesis.cancel();
+            hideAllScreens();
+            
+            // Mengosongkan isian nama sebelumnya
+            const nameInput = document.getElementById('studentName');
+            nameInput.value = "";
+            
+            // Menyembunyikan tombol Home di Header
+            document.getElementById('btnHomeHeader').classList.add('hide');
+            
+            // Menampilkan kembali Halaman Landing
+            screenLanding.classList.remove('hide');
+            
+            // Memfokuskan kursor ke dalam kotak ketik
+            setTimeout(() => {
+                nameInput.focus();
+            }, 100);
+        }
+
+        function hideAllScreens() {
+            screenLanding.classList.add('hide');
+            screenHome.classList.add('hide');
+            screenMaterial.classList.add('hide');
+            screenQuiz.classList.add('hide');
+            screenResult.classList.add('hide');
+        }
+
+        function openSubject(subjectKey) {
+            window.speechSynthesis.cancel(); // Matikan suara sblmnya jika ada
+            
+            currentSubjectKey = subjectKey;
+            currentSubjectData = appData[subjectKey];
+            
+            // Set Konten Materi
+            matTitle.innerText = currentSubjectData.material.title;
+            
+            // Deteksi otomatis apakah menggunakan gambar (.png/.jpg) atau emoji
+            const matVis = currentSubjectData.material.visual;
+            if (matVis.includes('.png') || matVis.includes('.jpg') || matVis.includes('.jpeg')) {
+                const fallbackText = `[Gambar ${matVis} belum ada di folder]`;
+                matVisual.innerHTML = `<img src="${matVis}" alt="Ilustrasi Materi" class="max-h-48 md:max-h-64 w-auto object-contain drop-shadow-xl rounded-2xl" onerror="this.onerror=null; this.parentNode.innerText='${fallbackText}';">`;
+            } else {
+                matVisual.innerText = matVis;
+            }
+
+            matText.innerText = currentSubjectData.material.content;
+            
+            hideAllScreens();
+            screenMaterial.classList.remove('hide');
+            
+            // Baca otomatis saat masuk materi
+            setTimeout(speakMaterial, 500); 
+        }
+
+        function speakMaterial() {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(currentSubjectData.material.audio);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.85; // Sedikit dilambatkan agar anak lebih mudah paham
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        function backToMaterial() {
+            window.speechSynthesis.cancel();
+            hideAllScreens();
+            screenMaterial.classList.remove('hide');
+        }
+
+        function startQuizExecution() {
+            window.speechSynthesis.cancel();
+            currentQuestions = currentSubjectData.questions;
+            currentIndex = 0;
+            
+            currentScore = 0;
+
+            subjectTitle.innerText = currentSubjectData.title;
+
+            hideAllScreens();
+            screenQuiz.classList.remove('hide');
+
+            renderQuestion();
+            updateProgress();
+        }
+
+        function renderQuestion() {
+            const q = currentQuestions[currentIndex];
+            questionText.innerText = q.question;
+            
+            // Deteksi otomatis apakah menggunakan gambar (.png/.jpg) atau emoji
+            if (q.visual.includes('.png') || q.visual.includes('.jpg') || q.visual.includes('.jpeg')) {
+                const fallbackText = `[Gambar ${q.visual} belum ada di folder]`;
+                questionVisual.innerHTML = `<img src="${q.visual}" alt="Ilustrasi Soal" class="max-h-48 md:max-h-64 w-auto object-contain drop-shadow-xl rounded-2xl" onerror="this.onerror=null; this.parentNode.innerText='${fallbackText}';">`;
+            } else {
+                questionVisual.innerText = q.visual;
+            }
+            
+            currentAttempt = 0;
+
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                // Tombol dibuat sangat besar untuk memudahkan motorik
+                btn.className = 'btn-bounce bg-white border-4 border-gray-300 text-2xl md:text-3xl font-display font-bold py-8 px-4 rounded-3xl shadow-lg hover:bg-gray-50 text-gray-800 transition-all';
+                btn.innerText = opt.text;
+                btn.onclick = () => checkAnswer(opt.correct, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            // Memberikan sedikit waktu delay sebelum otomatis membacakan soal
+            setTimeout(speakQuestion, 500);
+        }
+
+        function speakQuestion() {
+            window.speechSynthesis.cancel();
+            const q = currentQuestions[currentIndex];
+            const utterance = new SpeechSynthesisUtterance(q.audio);
+            utterance.lang = 'id-ID'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function checkAnswer(isCorrect, buttonElement) {
+            const allBtns = optionsContainer.querySelectorAll('button');
+            allBtns.forEach(b => b.disabled = true);
+
+            window.speechSynthesis.cancel();
+            
+            currentAttempt++;
+
+            if (isCorrect) {
+                // Jawaban Benar
+                if (currentAttempt === 1) {
+                    currentScore += 20; // Hanya dapat nilai 20 jika benar di klik pertama
+                }
+
+                buttonElement.classList.remove('border-gray-300', 'bg-white', 'text-gray-800');
+                buttonElement.classList.add('border-green-500', 'bg-green-200', 'text-green-900', 'shadow-[0_0_20px_rgba(74,222,128,0.6)]');
+                
+                fireConfetti();
+                
+                // Variasi pujian
+                const pujian = ["Pintar!", "Hebat sekali!", "Bagus!", "Benar!"];
+                const acak = Math.floor(Math.random() * pujian.length);
+                const cheerMsg = new SpeechSynthesisUtterance(pujian[acak]);
+                cheerMsg.lang = 'id-ID';
+                window.speechSynthesis.speak(cheerMsg);
+
+                setTimeout(() => {
+                    currentIndex++;
+                    if (currentIndex < currentQuestions.length) {
+                        updateProgress();
+                        renderQuestion();
+                    } else {
+                        showResult();
+                    }
+                }, 2000); // Tunggu 2 detik untuk anak menikmati efek benarnya
+
+            } else {
+                // Jawaban Salah (Diberi umpan balik lembut, tidak menakutkan)
+                buttonElement.classList.remove('border-gray-300', 'bg-white');
+                buttonElement.classList.add('border-red-400', 'bg-red-50', 'text-red-500');
+                
+                const tryAgainMsg = new SpeechSynthesisUtterance("Coba lihat lagi yang lain ya.");
+                tryAgainMsg.lang = 'id-ID';
+                window.speechSynthesis.speak(tryAgainMsg);
+
+                buttonElement.classList.add('animate-pulse');
+
+                setTimeout(() => {
+                    buttonElement.classList.remove('border-red-400', 'bg-red-50', 'text-red-500', 'animate-pulse');
+                    buttonElement.classList.add('border-gray-300', 'bg-white', 'text-gray-800');
+                    allBtns.forEach(b => b.disabled = false);
+                }, 2000);
+            }
+        }
+
+        function updateProgress() {
+            progressContainer.innerHTML = '';
+            for (let i = 0; i < currentQuestions.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'w-4 h-4 md:w-5 md:h-5 rounded-full transition-colors duration-300';
+                
+                if (i < currentIndex) {
+                    dot.classList.add('bg-green-500'); // Sudah selesai (Benar)
+                } else if (i === currentIndex) {
+                    dot.classList.add('bg-dayakYellow', 'animate-pulse'); // Sedang dikerjakan
+                } else {
+                    dot.classList.add('bg-gray-300'); // Belum dikerjakan
+                }
+                progressContainer.appendChild(dot);
+            }
+        }
+
+        function showResult() {
+            hideAllScreens();
+            screenResult.classList.remove('hide');
+            fireConfetti(); // Perayaan besar
+            
+            let predikatText = "";
+            let visualText = "";
+            let ucapanText = "";
+            let suaraText = "";
+
+            if (currentScore >= 80) {
+                predikatText = "SANGAT BAIK (A)";
+                visualText = "🌟🌟🌟";
+                ucapanText = `Luar Biasa, ${studentName}!`;
+                suaraText = `Luar biasa ${studentName}! Kamu mendapat nilai ${currentScore}. Predikat kamu Sangat Baik!`;
+            } else if (currentScore >= 60) {
+                predikatText = "BAIK (B)";
+                visualText = "👍🌟🌟";
+                ucapanText = `Bagus Sekali, ${studentName}!`;
+                suaraText = `Bagus sekali ${studentName}! Kamu mendapat nilai ${currentScore}. Predikat kamu Baik!`;
+            } else {
+                predikatText = "CUKUP (C)";
+                visualText = "💪🌟";
+                ucapanText = `Tetap Semangat, ${studentName}!`;
+                suaraText = `Tetap semangat belajar ya ${studentName}! Kamu mendapat nilai ${currentScore}.`;
+            }
+
+            document.getElementById('result-visual').innerText = visualText;
+            document.getElementById('result-title').innerText = ucapanText;
+            document.getElementById('result-score').innerText = currentScore;
+            document.getElementById('result-predikat').innerText = "Predikat: " + predikatText;
+
+            // --- MENYIMPAN HASIL KE DASBOR ---
+            learningHistory.push({
+                time: new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'}),
+                name: studentName,
+                subject: currentSubjectData.title,
+                score: currentScore,
+                predicate: predikatText
+            });
+            // ---------------------------------
+
+            setTimeout(() => {
+                const finishMsg = new SpeechSynthesisUtterance(suaraText);
+                finishMsg.lang = 'id-ID';
+                window.speechSynthesis.speak(finishMsg);
+            }, 500);
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play();
+                isMusicPlaying = true;
+            }
+            updateMusicButtonUI();
+        }
+
+        function updateMusicButtonUI() {
+            if (isMusicPlaying) {
+                musicIcon.innerText = "🔊";
+                musicText.innerText = "Musik On";
+                musicToggleBtn.classList.remove('bg-gray-500');
+                musicToggleBtn.classList.add('bg-dayakGreen');
+            } else {
+                musicIcon.innerText = "🔇";
+                musicText.innerText = "Musik Off";
+                musicToggleBtn.classList.remove('bg-dayakGreen');
+                musicToggleBtn.classList.add('bg-gray-500');
+            }
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        // Fungsi khusus agar confetti terlihat lebih meriah di akhir sesi
+        function fireConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#D32F2F', '#FBC02D', '#388E3C', '#4FC3F7']
+            });
+        }
+
+        // --- FUNGSI DASBOR PENCATAT ---
+        function showDashboard() {
+            const tbody = document.getElementById('dashboard-table-body');
+            tbody.innerHTML = '';
+            
+            if (learningHistory.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-500 font-bold bg-white">Belum ada data hasil belajar di sesi ini.</td></tr>';
+            } else {
+                // Diurutkan dari yang terbaru (reverse)
+                learningHistory.slice().reverse().forEach(record => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-gray-200 hover:bg-white transition-colors bg-white/50';
+                    tr.innerHTML = `
+                        <td class="p-3 text-sm text-gray-500">${record.time}</td>
+                        <td class="p-3 font-bold text-gray-800">${record.name}</td>
+                        <td class="p-3 text-gray-700 font-semibold">${record.subject}</td>
+                        <td class="p-3 text-center font-display text-xl ${record.score >= 80 ? 'text-green-600' : (record.score >= 60 ? 'text-blue-600' : 'text-yellow-600')}">${record.score}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            document.getElementById('modal-dashboard').classList.remove('hide');
+        }
+
+        function closeDashboard() {
+            document.getElementById('modal-dashboard').classList.add('hide');
+        }
+
+        function clearDashboard(btn) {
+            // Logika Hapus Tanpa Alert (Lebih aman)
+            if (btn.innerText.includes("Hapus Riwayat")) {
+                btn.innerText = "⚠️ Yakin Hapus?";
+                btn.classList.remove("bg-red-100", "text-red-600");
+                btn.classList.add("bg-red-600", "text-white");
+                
+                // Kembalikan ke semula jika tidak diklik lagi dalam 3 detik
+                setTimeout(() => {
+                    if (btn.innerText === "⚠️ Yakin Hapus?") {
+                        btn.innerText = "🗑️ Hapus Riwayat Sesi";
+                        btn.classList.remove("bg-red-600", "text-white");
+                        btn.classList.add("bg-red-100", "text-red-600");
+                    }
+                }, 3000);
+            } else {
+                // Eksekusi Hapus
+                learningHistory = [];
+                showDashboard(); // Segarkan tampilan tabel
+                
+                btn.innerText = "🗑️ Hapus Riwayat Sesi";
+                btn.classList.remove("bg-red-600", "text-white");
+                btn.classList.add("bg-red-100", "text-red-600");
+            }
+        }
+
+        // --- FUNGSI PROFIL PENGEMBANG ---
+        function showProfileModal() {
+            document.getElementById('modal-profile').classList.remove('hide');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('modal-profile').classList.add('hide');
+        }
+    </script>
+</body>
+</html>
